@@ -35,12 +35,14 @@ export function Hud() {
     console.log("Rending tab", tab);
     return(
         <>
-            <div>
-                {tabs.map((t) => {
-                    return <button id={t} key={t} onClick={tabClick}>{t}</button>
-                })}
+            <div className="navbar">
+                <div className="tab-container">
+                    {tabs.map((t) => {
+                        return <button id={t} key={t} onClick={tabClick}>{t}</button>
+                    })}
+                </div>
+                {page}
             </div>
-            {page}
         </>
     );
 
