@@ -11,6 +11,42 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  --white-color:                  #ffffff;
+  --primary-color:                #3A3363;
+  --secondary-color:              #F3D569;
+  --section-bg-color:             #FDFAEE;
+  --custom-btn-bg-color:          #3A3363;
+  --custom-btn-bg-hover-color:    #F3D569;
+  --custom-btn2-bg-color:         #F3D569;
+  --custom-btn2-bg-hover-color:   #3A3363;
+  --dark-color:                   #170312;
+  --p-color:                      #717275;
+  --border-color:                 #070b08;
+  --link-hover-color:             #262140;
+
+  --body-font-family:             'Chewy', cursive, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --title-font-family:            'Chewy', cursive, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  --h1-font-size:                 58px;
+  --h2-font-size:                 46px;
+  --h3-font-size:                 32px;
+  --h4-font-size:                 28px;
+  --h5-font-size:                 24px;
+  --h6-font-size:                 22px;
+  --p-font-size:                  20px;
+  --menu-font-size:               14px;
+  --nav-font-size:                22px;
+  --btn-font-size:                18px;
+  --copyright-font-size:          16px;
+
+  --border-radius-large:          100px;
+  --border-radius-medium:         20px;
+  --border-radius-small:          10px;
+
+  --font-weight-normal:           400;
+  --font-weight-medium:           550;
+  --font-weight-semibold:         600;
+  --font-weight-bold:             700;
 }
 
 a {
