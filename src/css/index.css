@@ -27,7 +27,7 @@
   --body-font-family:             'Chewy', cursive, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   --title-font-family:            'Chewy', cursive, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 
-  --h1-font-size:                 58px;
+  --h1-font-size:                 56px;
   --h2-font-size:                 46px;
   --h3-font-size:                 32px;
   --h4-font-size:                 28px;
@@ -35,7 +35,7 @@
   --h6-font-size:                 22px;
   --p-font-size:                  20px;
   --menu-font-size:               14px;
-  --nav-font-size:                22px;
+  --nav-font-size:                24px;
   --btn-font-size:                18px;
   --copyright-font-size:          16px;
 
@@ -51,11 +51,11 @@
 
 a {
   font-weight: 500;
-  color: #3A3363;
+  color: var(--custom-btn-bg-color);
   text-decoration: inherit;
 }
 a:hover {
-  color: #262140;
+  color: var(--link-hover-color);
 }
 
 body {
@@ -64,49 +64,57 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #FDFAEE;
+  background-color: var(--section-bg-color);
 }
 
 h1 {
-  font-size: 3.2em;
+  font-size: var(--h1-font-size);
   line-height: 1.1;
 }
 
+.company-logo {
+  max-height: 100px; /* Adjust the max height of your logo */
+}
+
 .navbar {
+  position: fixed;
+  top: 0;
+  width: 90%;
   display: flex;
-  justify-content: flex-end;
   align-items: center;
-  margin-left:25px;
-  padding:35px 0;
+  margin-left:55px;
+  margin-right:25px;
+  padding-top: 10px;
   background-color: #FDFAEE;
+  border-bottom: 2px solid #3A3363;
 }
 
 .tab-container {
   display: flex;
+  gap: 20px;
+  justify-content: space-between;
 }
 
-button {
+.navbar-btn {
   color: #3A3363 !important;
-  font-size: 14px;
+  font-size: var(--nav-font-size);
+  text-transform: uppercase;
   padding: 10px 20px;
   border-radius: 10px;
-  background: #FDFAEE;
+  background: none;
   border-radius: 8px;
-  border: 1px solid #FDFAEE;
+  border: none;
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
   transition: border-color 0.25s;
 }
-button:hover {
+.navbar-btn:hover {
   font-weight: bold;
   color: #262140 !important;
   background: #F3D569;
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
+
 
 @media (prefers-color-scheme: light) {
   :root {
