@@ -7,7 +7,7 @@ import Financials from "./Financials";
 import Contact from "./Contact";
 import Profiles from "./Profiles";
 
-import companyLogo from "../css/YMDLogo.png";
+import companyLogo from "../assets/img/YMDLogo.png";
 
 export function Hud() {
 
@@ -39,7 +39,7 @@ export function Hud() {
         <>
             <div className="navbar">
                 <img src={companyLogo} alt="Company Logo" className="company-logo" />
-                <h1>Your Music Depot</h1>
+                <h1 className="spacer">Your Music Depot</h1>
                 <div className="tab-container">
                 {tabs.map((t) => (
                     <button className="navbar-btn" id={t} key={t} onClick={tabClick}>
