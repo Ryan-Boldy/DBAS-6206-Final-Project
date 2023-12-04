@@ -27,7 +27,7 @@
   --body-font-family:             'Chewy', cursive, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   --title-font-family:            'Chewy', cursive, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 
-  --h1-font-size:                 56px;
+  --h1-font-size:                 52px;
   --h2-font-size:                 46px;
   --h3-font-size:                 32px;
   --h4-font-size:                 28px;
@@ -35,7 +35,7 @@
   --h6-font-size:                 22px;
   --p-font-size:                  20px;
   --menu-font-size:               14px;
-  --nav-font-size:                24px;
+  --nav-font-size:                22px;
   --btn-font-size:                18px;
   --copyright-font-size:          16px;
 
@@ -73,7 +73,7 @@ h1 {
 }
 
 .company-logo {
-  max-height: 100px; /* Adjust the max height of your logo */
+  max-height: 80px; /* Adjust the max height of your logo */
 }
 
 .navbar {
@@ -120,12 +120,12 @@ h1 {
   color: white;
   font-size: var(--nav-font-size);
   text-transform: uppercase;
-  padding: 8px 16px;
-  border-radius: 20px;
+  padding: 6px 10px;
+  border-radius: 30px;
   background: none;
-  border-radius: 8px;
   border: none;
   font-weight: 500;
+  margin: 4px 2px;
   font-family: inherit;
   cursor: pointer;
   transition: border-color 0.25s;
@@ -136,9 +136,66 @@ h1 {
   background: #F3D569;
 }
 
+.custom-btn {
+  background-color: var(--custom-btn-bg-color) !important;
+  color: white;
+  font-size: var(--nav-font-size);
+  text-transform: uppercase;
+  padding: 6px 10px;
+  border-radius: 30px;
+  background: none;
+  border: none;
+  font-weight: 500;
+  margin: 4px 2px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+.custom-btn:hover {
+  font-weight: bold;
+  color: #262140 !important;
+  background: #F3D569;
+}
 .spacer {
   padding-right: 30px;
 }
+
+.input-field {
+  background-color: var(--secondary-color);
+  font-weight: bolder;
+  color: var(--primary-color);
+  border: none;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+/* Apply specific styles to the placeholder text */
+.input-field::placeholder {
+  color: var(--link-hover-color);
+}
+
+
+/* Table Styles */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  border: 2px solid var(--primary-color);
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: transparent;
+  color: var(--primary-color);
+}
+
+td {
+  color: var(--primary-color);
+}
+
 
 @media (prefers-color-scheme: light) {
   :root {

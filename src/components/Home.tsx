@@ -4,9 +4,9 @@ import piano from "../assets/img/PianoHands.png";
 import guitarline from "../assets/img/GuitarsLinedUp.png";
 export default function Home() {
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', marginTop: '170px' }}>
+        <div className='content'style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', marginTop: '170px' }}>
             {/* Landscape Photo */}
-            <img src={guitar} alt="Guitar in Green Leaves" style={{ maxWidth: '100%', maxHeight: '270px', marginBottom: '20px', paddingLeft: '60px'}} />
+            <img src={guitar} alt="Guitar in Green Leaves" style={{ maxWidth: '1000px', maxHeight: '300px', marginBottom: '20px', paddingLeft: '60px'}} />
 
             {/* Text paragraph and three square photos next to each other */}
             <div style={{ display: 'flex', paddingLeft: '100px', paddingRight: '100px'}}>
