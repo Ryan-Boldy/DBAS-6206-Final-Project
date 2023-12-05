@@ -1,3 +1,7 @@
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-quartz.css';
+import { AgGridReact } from 'ag-grid-react';
+import { ColDef } from 'ag-grid-community';
 import React, { useState } from 'react';
 
 interface Profile {
@@ -6,6 +10,12 @@ interface Profile {
   profileType: string;
 }
 
+// AG Grid column definitions
+const columnDefs: ColDef[] = [
+  { headerName: 'First Name', field: 'firstName' },
+  { headerName: 'Last Name', field: 'lastName' },
+  { headerName: 'Profile Type', field: 'profileType' },
+];
 export default function Profiles() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -70,25 +80,14 @@ export default function Profiles() {
         <button className="custom-btn" type="submit">Submit</button>
       </form>
 
-      {/* Profiles Table */}
-      <table>
-        <thead>
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Profile Type</th>
-          </tr>
-        </thead>
-        <tbody>
-          {profiles.map((profile, index) => (
-            <tr key={index}>
-              <td>{profile.firstName}</td>
-              <td>{profile.lastName}</td>
-              <td>{profile.profileType}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {/* AG Grid Table */}
+      <div className="ag-theme-quartz" style={{ height: 500, width: '100%' }}>
+        <AgGridReact
+          rowData={profiles}
+          columnDefs={columnDefs}
+          domLayout='autoHeight' // optional, adjusts the height automatically
+        />
+      </div>
     </div>
   );
 }

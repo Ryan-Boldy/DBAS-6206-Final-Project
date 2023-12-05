@@ -13,6 +13,8 @@
     "@aws-sdk/client-dynamodb": "^3.405.0",
     "@aws-sdk/util-dynamodb": "^3.405.0",
     "@react-typed-hooks/use-key-press": "^1.0.5",
+    "ag-grid-community": "^31.0.0",
+    "ag-grid-react": "^31.0.0",
     "googleapis": "^126.0.1",
     "jotai": "^2.4.2",
     "query-string": "^8.1.0",
