@@ -8,7 +8,6 @@ import Contact from "./Contact";
 import Profiles from "./Profiles";
 
 import companyLogo from "../assets/img/YMDLogo.png";
-import { Booking } from "./DataComponents/Bookings";
 
 export function Hud() {
 
@@ -38,7 +37,6 @@ export function Hud() {
     console.log("Rending tab", tab);
     return(
         <>
-            <Booking />
             <div className="navbar">
                 <img src={companyLogo} alt="Company Logo" className="company-logo" />
                 <h1 className="spacer">Your Music Depot</h1>
