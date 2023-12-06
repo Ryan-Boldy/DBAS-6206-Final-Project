@@ -2,15 +2,10 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { AgGridReact } from 'ag-grid-react';
 import { ColDef, GridOptions } from 'ag-grid-community';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { classMap, clientMap, instructorMap, roomMap, staffMap, studentMap } from '../Resources/GlobalStates';
 import { useAtom } from 'jotai';
 
-interface Profile {
-  firstName: string;
-  lastName: string;
-  profileType: string;
-}
 
 // AG Grid column definitions
 
@@ -41,31 +36,27 @@ export default function Profiles() {
   const rmFields = useMemo(() => ["SortKey", "rmMax"], []);
   const rmHeaders = useMemo(() => ["Code", "Capacity"], []);
 
-  const claFields = useMemo(() => ["classInstructor", "classNotes", "Author"], []);
-  const claHeaders = useMemo(() => ["Instructor", "Notes", "Author"], []);
+  const claFields = useMemo(() => ["classInstructor", "classNotes", "Author", "PartitionKey"], []);
+  const claHeaders = useMemo(() => ["Instructor", "Notes", "Author", "Type"], []);
 
-  const clFields = useMemo(() => [""], []);
-  const clHeaders = useMemo(() => [], []);
+  const clFields = useMemo(() => ["clFirstName", "clLastName", "PartitionKey", "clBalance", "clNotes", "Author"], []);
+  const clHeaders = useMemo(() => ["First Name", "Last Name", "Type", "Balance", "Notes", "Author"], []);
 
-  const stFields = useMemo(() => [], []);
-  const stHeaders = useMemo(() => [], []);
+  const stFields = useMemo(() => ["stFirstName", "stLastName", "PartitionKey", "Author", "stClient", "stNotes"], []);
+  const stHeaders = useMemo(() => ["First Name", "Last Name", "Type", "Author", "Client", "Notes"], []);
 
+  const [rowData, setRowData] = useState(Array.from(staffData.values()));
+  const [columnDefs, setColumnDefs] = useState(stfHeaders.map((header, index) => ({ headerName: header, field: stfFields[index] })) as ColDef[]);
 
-  const [gridOptions, setGridOptions] = useState({
-    columnDefs: [] as ColDef[],
-    rowData: [] as any[],
-  } as GridOptions);
-  
-  const updateData = (headers: string[], fields: string[], rowData: any[]) => {
+  const updateData = (headers: string[], fields: string[], rd: any) => {
     console.log("Grid updating..");
-    setGridOptions({
-      columnDefs: headers.map((header, index) => ({ headerName: header, field: fields[index] })),
-      rowData: rowData,
-    });
+      setColumnDefs(headers.map((header, index) => ({ headerName: header, field: fields[index] })));
+      setRowData(rd);
   };
-  
 
   useEffect(() => {
+    
+    console.log("DEBUG",studentData.get("7c2b3c4d-5e6f-7g8h-9i10-jk11lmno12pq"));
     console.log("Set to:",profileType);
     switch(profileType) {
       case "Instructors":
@@ -90,18 +81,12 @@ export default function Profiles() {
   }, [profileType]);
 
   useEffect(() => {
-    console.log(gridOptions);
-  }, [gridOptions])
+    console.log(rowData);
+  }, [rowData]);
 
-
-  // useEffect(() => {
-  //   if(array && headers && fields) {
-  //     console.log("fields", fields);
-  //     console.log("Data", array);
-  //     console.log("Headers", headers);
-  //     updateData(headers, fields, array);
-  //   }
-  // }, [headers, fields, array]);
+  useEffect(() => {
+    console.log(columnDefs);
+  }, [columnDefs]);
 
   return (
     <div style={({paddingTop: 250})}>
@@ -120,7 +105,8 @@ export default function Profiles() {
       <div className="ag-theme-quartz" style={{ height: 500, width: 1500 }}>
         <AgGridReact
         key={profileType}
-          gridOptions={gridOptions}
+          rowData={rowData}
+          columnDefs={columnDefs}
           domLayout='autoHeight' 
         />
       </div>
