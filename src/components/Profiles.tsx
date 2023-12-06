@@ -2,7 +2,7 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { AgGridReact } from 'ag-grid-react';
 import { ColDef, GridOptions } from 'ag-grid-community';
-import { useCallback, useRef, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { classMap, clientMap, instructorMap, roomMap, staffMap, studentMap } from '../Resources/GlobalStates';
 import { useAtom } from 'jotai';
 
@@ -46,7 +46,11 @@ export default function Profiles() {
   const stHeaders = useMemo(() => ["First Name", "Last Name", "Type", "Author", "Client", "Notes"], []);
 
   const [rowData, setRowData] = useState(Array.from(staffData.values()));
-  const [columnDefs, setColumnDefs] = useState(stfHeaders.map((header, index) => ({ headerName: header, field: stfFields[index] })) as ColDef[]);
+  const [columnDefs, setColumnDefs] = useState(stfHeaders.map((header, index) => ({ headerName: header, field: stfFields[index], filter: 'agTextColumnFilter',})) as ColDef[]);
+  
+  const [gridApi, setGridApi] = useState(null);
+  const [gridColumnApi, setGridColumnApi] = useState(null);
+
   const gridOptions: GridOptions = {
     quickFilterText: '', // Initial quick filter value
   };
@@ -57,10 +61,13 @@ export default function Profiles() {
       setRowData(rd);
   };
 
-  const onFilterTextBoxChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const api = gridOptions.api as any;
-    api.setQuickFilter(e.target.value);
-  };
+  function onGridReady(params: { api: any; columnApi: any }) {
+    setGridApi(params.api);
+    setGridColumnApi(params.columnApi);
+  }
+  const onFilterTextChange=(e: React.ChangeEvent<HTMLInputElement>)=>{
+    (gridApi as any)?.setQuickFilter(e.target.value);
+  }
   
 
   useEffect(() => {
@@ -114,20 +121,22 @@ export default function Profiles() {
         <div className="example-header">
           <span>Quick Filter: </span>
           <input
-            type="text"
+            type="search"
             id="filter-text-box"
             placeholder="Filter..."
-            onInput={onFilterTextBoxChanged}
+            onChange={onFilterTextChange}
           />
         </div>
 
-      <div className="ag-theme-quartz" style={{ height: 500, width: 1500 }}>
+      <div className="ag-theme-quartz ag-theme-mycustomtheme" style={{ height: 500, width: 1500 }}>
         <AgGridReact
         key={profileType}
           rowData={rowData}
           columnDefs={columnDefs}
           domLayout='autoHeight' 
+          animateRows={true}
           gridOptions={gridOptions}
+          onGridReady={onGridReady}
         />
       </div>
     </div>

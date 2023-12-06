@@ -196,6 +196,25 @@ td {
   color: var(--primary-color);
 }
 
+.ag-theme-ymd {
+  --ag-background-color: #3A3363;
+  --ag-foreground-color: #F3D569;
+  --ag-header-background-color: #3A3363;
+  --ag-header-foreground-color: #F3D569;
+}
+
+.ag-theme-ymd .ag-cell {
+  /* Customize cell styles using variables */
+  background-color: var(--ag-background-color);
+  color: var(--ag-foreground-color);
+}
+
+.ag-theme-ymd .ag-header-cell {
+  /* Customize header cell styles using variables */
+  background-color: var(--ag-header-background-color);
+  color: var(--ag-header-foreground-color);
+}
+
 
 @media (prefers-color-scheme: light) {
   :root {
