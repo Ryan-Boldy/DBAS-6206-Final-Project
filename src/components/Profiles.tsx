@@ -2,7 +2,7 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { AgGridReact } from 'ag-grid-react';
 import { ColDef, GridOptions } from 'ag-grid-community';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useRef, useEffect, useMemo, useState } from 'react';
 import { classMap, clientMap, instructorMap, roomMap, staffMap, studentMap } from '../Resources/GlobalStates';
 import { useAtom } from 'jotai';
 
@@ -47,12 +47,21 @@ export default function Profiles() {
 
   const [rowData, setRowData] = useState(Array.from(staffData.values()));
   const [columnDefs, setColumnDefs] = useState(stfHeaders.map((header, index) => ({ headerName: header, field: stfFields[index] })) as ColDef[]);
+  const gridOptions: GridOptions = {
+    quickFilterText: '', // Initial quick filter value
+  };
 
   const updateData = (headers: string[], fields: string[], rd: any) => {
     console.log("Grid updating..");
       setColumnDefs(headers.map((header, index) => ({ headerName: header, field: fields[index] })));
       setRowData(rd);
   };
+
+  const onFilterTextBoxChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const api = gridOptions.api as any;
+    api.setQuickFilter(e.target.value);
+  };
+  
 
   useEffect(() => {
     
@@ -102,12 +111,23 @@ export default function Profiles() {
           </select>
         </div>
 
+        <div className="example-header">
+          <span>Quick Filter: </span>
+          <input
+            type="text"
+            id="filter-text-box"
+            placeholder="Filter..."
+            onInput={onFilterTextBoxChanged}
+          />
+        </div>
+
       <div className="ag-theme-quartz" style={{ height: 500, width: 1500 }}>
         <AgGridReact
         key={profileType}
           rowData={rowData}
           columnDefs={columnDefs}
           domLayout='autoHeight' 
+          gridOptions={gridOptions}
         />
       </div>
     </div>
