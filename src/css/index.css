@@ -196,23 +196,16 @@ td {
   color: var(--primary-color);
 }
 
+/* AG Grid default styles (if not using a pre-built theme) */
+
+/* Your custom theme */
 .ag-theme-ymd {
-  --ag-background-color: #3A3363;
-  --ag-foreground-color: #F3D569;
-  --ag-header-background-color: #3A3363;
-  --ag-header-foreground-color: #F3D569;
-}
-
-.ag-theme-ymd .ag-cell {
-  /* Customize cell styles using variables */
-  background-color: var(--ag-background-color);
-  color: var(--ag-foreground-color);
-}
-
-.ag-theme-ymd .ag-header-cell {
-  /* Customize header cell styles using variables */
-  background-color: var(--ag-header-background-color);
-  color: var(--ag-header-foreground-color);
+  --ag-background-color: #FDFAEE !important;
+  --ag-foreground-color: var(--primary-color) !important;
+  --ag-header-background-color: #F2EFE3 !important;
+  --ag-header-foreground-color: var(--primary-color) !important;
+  --ag-active-color: var(--primary-color) !important;
+  --ag-border-color: #D3D1DB !important;
 }
 
 

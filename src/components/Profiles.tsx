@@ -6,7 +6,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { classMap, clientMap, instructorMap, roomMap, staffMap, studentMap } from '../Resources/GlobalStates';
 import { useAtom } from 'jotai';
 
-
 // AG Grid column definitions
 
 export default function Profiles() {
@@ -46,7 +45,7 @@ export default function Profiles() {
   const stHeaders = useMemo(() => ["First Name", "Last Name", "Type", "Author", "Client", "Notes"], []);
 
   const [rowData, setRowData] = useState(Array.from(staffData.values()));
-  const [columnDefs, setColumnDefs] = useState(stfHeaders.map((header, index) => ({ headerName: header, field: stfFields[index], filter: 'agTextColumnFilter',})) as ColDef[]);
+  const [columnDefs, setColumnDefs] = useState(stfHeaders.map((header, index) => ({ headerName: header, field: stfFields[index], filter: true,})) as ColDef[]);
   
   const [gridApi, setGridApi] = useState(null);
   const [gridColumnApi, setGridColumnApi] = useState(null);
@@ -57,7 +56,7 @@ export default function Profiles() {
 
   const updateData = (headers: string[], fields: string[], rd: any) => {
     console.log("Grid updating..");
-      setColumnDefs(headers.map((header, index) => ({ headerName: header, field: fields[index] })));
+      setColumnDefs(headers.map((header, index) => ({ headerName: header, field: fields[index], filter: true, })));
       setRowData(rd);
   };
 
@@ -105,7 +104,7 @@ export default function Profiles() {
   }, [columnDefs]);
 
   return (
-    <div style={({paddingTop: 250})}>
+    <div style={({paddingTop: 200, paddingLeft: 100})}>
 
         <div>
           <select id="profileType" value={profileType} onChange={(e) => setProfileType(e.target.value)} required className="input-field">
@@ -119,16 +118,17 @@ export default function Profiles() {
         </div>
 
         <div className="example-header">
-          <span>Quick Filter: </span>
+          <span  style={{fontSize: 24}}>Quick Filter: </span>
           <input
             type="search"
             id="filter-text-box"
             placeholder="Filter..."
             onChange={onFilterTextChange}
+            className="input-field"
           />
         </div>
 
-      <div className="ag-theme-quartz ag-theme-mycustomtheme" style={{ height: 500, width: 1500 }}>
+      <div className="ag-theme-quartz ag-theme-ymd" style={{ height: 500, width: 1250 }}>
         <AgGridReact
         key={profileType}
           rowData={rowData}
