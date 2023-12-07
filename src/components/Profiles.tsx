@@ -5,7 +5,7 @@ import { CellValueChangedEvent, ColDef, GridOptions } from 'ag-grid-community';
 import { useEffect, useMemo, useState } from 'react';
 import { classMap, clientMap, instructorMap, roomMap, staffMap, studentMap, transactionMap, user } from '../Resources/GlobalStates';
 import { useAtom } from 'jotai';
-import { Instructor } from '../Resources/GlobalInterfaces';
+import { Client, Instructor } from '../Resources/GlobalInterfaces';
 import { v4 as uuidv4 } from 'uuid';
 // AG Grid column definitions
 
@@ -277,8 +277,6 @@ export default function Profiles() {
   };
   
   const renderClassesMenu = () => {
-
-  
     const handleInstructorChange = (instructor: Instructor) => {
       setSelectedRowData({...selectedRowData, classInstructor: instructor.SortKey})
       const event = {data: {...selectedRowData, classInstructor: instructor.SortKey}};
@@ -348,15 +346,104 @@ export default function Profiles() {
   };
   
   const renderClientsMenu = () => {
+  
+    const handleStudentChange = (studentId: string) => {
+      // Create a new array to represent the updated students
+      const updatedStudents = [...selectedRowData.clStudents];
+    
+      // Check if the studentId is already in the array
+      const index = updatedStudents.indexOf(studentId);
+    
+      if (index !== -1) {
+        // If the studentId is found, remove it
+        updatedStudents.splice(index, 1);
+      } else {
+        // If the studentId is not found, add it
+        updatedStudents.push(studentId);
+      }
+    
+      // Log or use the updatedStudents array as needed
+      console.log(updatedStudents);
+    
+      // If you need to update the selectedRowData with the new array
+      // (this is typically done with a state update in a React component)
+      setSelectedRowData({ ...selectedRowData, clStudents: updatedStudents });
+      const event = {data: {...selectedRowData, clStudents: updatedStudents}};
+      onCellValueChanged(event);
+    };  
+  
     return (
       <div>
-        {/* Customize the menu for the "Classes" profileType */}
-        <p>Modify Client Data:</p>
+        <p style={{fontSize: 'large'}}>Modify Client: {selectedRowData.SortKey}</p>
+        {/* Customize the menu for the "Clients" profileType */}
+        <div>
+          <p>Select Students:</p>
+          {studentArray.map((student) => (
+            <label key={student.SortKey}>
+              <input
+                type="checkbox"
+                value={student.SortKey}
+                checked={selectedRowData.clStudents.includes(student.SortKey) }
+                onChange={() => handleStudentChange(student.SortKey)}
+              />
+              {`${student.stFirstName} ${student.stLastName}`}
+            </label>
+          ))}
+        </div>
         {renderMenuContent()}
-        {/* Add additional content specific to the "Classes" profileType */}
       </div>
     );
   };
+
+  const renderTransactionsMenu = () => {
+    const handleInstructorChange = (instructor: Instructor) => {
+      setSelectedRowData({...selectedRowData, trInstructor: instructor.SortKey})
+      const event = {data: {...selectedRowData, trInstructor: instructor.SortKey}};
+      onCellValueChanged(event);
+    };
+  
+    const handleClientChange = (client: Client) => {
+      setSelectedRowData({...selectedRowData, trClient: client.SortKey})
+      const event = {data: {...selectedRowData, trClient: client.SortKey}};
+      onCellValueChanged(event);
+    };
+  
+    return (
+      <div>
+        <p style={{fontSize: 'large'}}>Modify Transaction: {selectedRowData.SortKey}</p>
+        {/* Customize the menu for the "Clients" profileType */}
+        <div>
+          <p>Select an Instructor:</p>
+          {instructorArray.map((instructor) => (
+            <label key={instructor.SortKey}>
+              <input
+                type="radio"
+                value={instructor.SortKey}
+                checked={selectedRowData.trInstructor === instructor.SortKey}
+                onChange={() => handleInstructorChange(instructor)}
+              />
+              {`${instructor.inFirstName} ${instructor.inLastName}`}
+            </label>
+          ))}
+        </div>
+        <div>
+          <p>Select a Client:</p>
+          {clientArray.map((client) => (
+            <label key={client.SortKey}>
+              <input
+                type="radio"
+                value={client.SortKey}
+                checked={selectedRowData.trClient === client.SortKey}
+                onChange={() => handleClientChange(client)}
+              />
+              {`${client.clFirstName} ${client.clLastName}`}
+            </label>
+          ))}
+        </div>
+        {renderMenuContent()}
+      </div>
+    );
+  }
 
   return (
     <div style={({paddingTop: 200, paddingLeft: 100})}>
@@ -366,6 +453,8 @@ export default function Profiles() {
             {/* Render different menus based on profileType */}
             {profileType === 'Clients' ? renderClientsMenu() : null}
             {profileType === 'Classes' ? renderClassesMenu() : null}
+            {profileType === 'Transactions' ? renderTransactionsMenu() : null}
+
           </div>
         )}
         <div>
