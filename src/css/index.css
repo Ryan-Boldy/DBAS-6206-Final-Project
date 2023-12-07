@@ -208,6 +208,13 @@ td {
   --ag-border-color: #D3D1DB !important;
 }
 
+/* Calendar.css */
+.calendar-container {
+  padding: 20px;
+  margin: 20px;
+  background-color: #f8f8f8;
+}
+
 
 @media (prefers-color-scheme: light) {
   :root {

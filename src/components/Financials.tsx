@@ -39,7 +39,7 @@ export default function Financials() {
 
 
     useEffect(() => {
-        console.log("DEBUG",transactionData.get("9b2b3c4d-5e6f-7g8h-9i10-jk11lmno12pq"));
+        console.log("DEBUG",transactionData.get("0b2b3c4d-5e6f-7g8h-9i10-jk11lmno12pq"));
         console.log("Set to:",profileType);
     }, [profileType]);
 
