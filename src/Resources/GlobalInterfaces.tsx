@@ -2,7 +2,6 @@ export interface Student {
     PartitionKey: string,
     SortKey: string,
     Author: string,
-    stClasses: string[],
     stClient: string,
     stNotes: string,
     stFirstName: string,
@@ -24,18 +23,15 @@ export interface Instructor {
     PartitionKey: string,
     SortKey: string,
     Author: string,
-    inClasses: string[],
     inFirstName: string,
     inLastName: string,
-    inTransactions: string[],
-    inNotes: string[]
+    inNotes: string
 }
 
 export interface Client {
     PartitionKey: string,
     SortKey: string,
     Author: string,
-    clTransactions: string[],
     clStudents: string[],
     clFirstName: string,
     clLastName: string,
@@ -47,10 +43,10 @@ export interface Class {
     PartitonKey: string,
     SortKey: string,
     Author: string,
-    classStudents: string[];
     classInstructor: string,
     classNotes: string,
     students: string[],
+    clName: string,
 }
 
 export interface Booking {
@@ -71,7 +67,6 @@ export interface Transaction {
     trInstructor: string,
     trStatus: boolean,
     trAmount: number,
-    trDirection: boolean,
     trNotes: string,
 }
 

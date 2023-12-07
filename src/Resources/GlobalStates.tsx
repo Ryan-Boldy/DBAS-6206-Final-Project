@@ -23,3 +23,5 @@ export const roomStatus = atom(false);
 export const staffStatus = atom(false);
 export const studentStatus = atom(false);
 export const transactionStatus = atom(false);
+
+export const user = atom("");
