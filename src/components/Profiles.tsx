@@ -245,7 +245,7 @@ export default function Profiles() {
         {/* For example, you can use input fields to edit the rowData */}
         {/* <input type="text" value={selectedRowData.someProperty} onChange={(e) => handleInputChange(e)} /> */}
         {/* Add other form fields as needed */}
-        <button onClick={closeMenu}>Close</button>
+        <button onClick={closeMenu} className='custom-btn' style={{marginBottom: '2%'}}>Close</button>
       </div>
     );
   };
@@ -286,7 +286,7 @@ export default function Profiles() {
   
     return (
       <div>
-        <p>Modify Class: {selectedRowData.SortKey}</p>
+        <p style={{fontSize: 'large'}}>Modify Class: {selectedRowData.SortKey}</p>
         {/* Customize the menu for the "Clients" profileType */}
         <div>
           <p>Select an Instructor:</p>

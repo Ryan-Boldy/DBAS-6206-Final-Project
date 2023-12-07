@@ -175,6 +175,15 @@ h1 {
   color: var(--link-hover-color);
 }
 
+/* Style for radio buttons */
+input[type="radio"] {
+  margin-right: 7px;
+}
+
+/* Style for checkboxes */
+input[type="checkbox"] {
+  margin-right: 5px;
+}
 
 /* Table Styles */
 table {

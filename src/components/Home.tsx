@@ -9,9 +9,9 @@ export default function Home() {
             <img src={guitar} alt="Guitar in Green Leaves" style={{ maxWidth: '1000px', maxHeight: '300px', marginBottom: '20px', paddingLeft: '60px'}} />
 
             {/* Text paragraph and three square photos next to each other */}
-            <div style={{ display: 'flex', paddingLeft: '100px', paddingRight: '100px'}}>
+            <div style={{ display: 'flex', paddingLeft: '7%', paddingRight: '5%'}}>
                 {/* Text paragraph to the left */}
-                <div style={{ flex: 1, textAlign: 'left', marginRight: '20px' }}>
+                <div style={{ flex: 1, textAlign: 'left', marginRight: '3%' }}>
                     <p>
                     Your Music Depot is the one and only place for young students to learn about the wonders and expression of music. 
                     Offering a wide range of music lessons, Your Music Depot serves as a haven for budding musicians and enthusiasts. 

@@ -9,6 +9,8 @@ import { StudentComponent } from "./DataComponents/Students";
 import { TransactionComponent } from "./DataComponents/Transactions";
 import { Hud } from "./Hud";
 
+import companyLogo from "../assets/img/YMDLogo.png";
+
 export function AuthPage() {
     const [loggedIn, setLoggedIn] = useState(false);
     const [userName, setUserName] = useState('');
@@ -33,9 +35,14 @@ export function AuthPage() {
     };
 
     return (
-        <>
+        <div style={{ marginLeft: '12%', display: 'flex', alignItems: 'center' }}>
+            <img src={companyLogo} alt="Company Logo" className="company-logo" style={{ marginRight: '10px' }} />
+            <div style={{width: 'max-content'}}>
+                <h1>Your Music Depot</h1>
+                <p>Welcome! Please Sign-In to get Started!</p>
+            </div>
             {!loggedIn && (
-                <div style={{width: '100%', paddingLeft: '50%'}}>
+                <div style={{width: '100%', paddingLeft: '20%'}}>
                     <label htmlFor="username">Username: </label>
                     <input
                         type="text"
@@ -44,7 +51,7 @@ export function AuthPage() {
                         onChange={(e) => setUserName(e.target.value)}
                         className="input-field"
                     />
-                    <label htmlFor="password">  Password: </label>
+                    <label htmlFor="password">Password: </label>
                     <input
                         type="password"
                         id="password"
@@ -69,6 +76,6 @@ export function AuthPage() {
                     <TransactionComponent />
                 </>
             )}
-        </>
+        </div>
     );
 }
