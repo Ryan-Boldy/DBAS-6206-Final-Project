@@ -16,7 +16,7 @@ export default function Financials() {
 
     const transactionArray = useMemo(() => Array.from(transactionData.values()), [transactionData]);
 
-    const trFields = useMemo(() => ["trStatus", "trAmount", "trClient", "trAuthor", "trInstructor"], []);
+    const trFields = useMemo(() => ["trStatus", "trAmount", "trClient", "Author", "trInstructor"], []);
     const trHeaders = useMemo(() => ["Status", "Amount", "Client", "Author", "Instructor"], []);
 
     const [rowData, setRowData] = useState(Array.from(transactionData.values()));

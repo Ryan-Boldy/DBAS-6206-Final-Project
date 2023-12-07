@@ -210,9 +210,11 @@ td {
 
 /* Calendar.css */
 .calendar-container {
+  width: max-content;
+  height: max-content;
   padding: 20px;
   margin: 20px;
-  background-color: #f8f8f8;
+  background-color: #FDFAEE;
 }
 
 

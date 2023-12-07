@@ -47,7 +47,7 @@ export default function Contact() {
     };
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', marginTop: '50px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', marginTop: '50px', marginLeft: '50%' }}>
             <div style={{ display: 'flex', width: '800px' }}>
                 {/* Left half - Title and Paragraph */}
                 <div style={{ flex: 1, textAlign: 'left', marginRight: '20px' }}>
