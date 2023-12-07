@@ -3,7 +3,7 @@ import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { AgGridReact } from 'ag-grid-react';
 import { CellValueChangedEvent, ColDef, GridOptions } from 'ag-grid-community';
 import { useEffect, useMemo, useState } from 'react';
-import { classMap, clientMap, instructorMap, roomMap, staffMap, studentMap } from '../Resources/GlobalStates';
+import { classMap, clientMap, instructorMap, roomMap, staffMap, studentMap, transactionMap } from '../Resources/GlobalStates';
 import { useAtom } from 'jotai';
 import { Instructor } from '../Resources/GlobalInterfaces';
 
@@ -19,8 +19,9 @@ export default function Profiles() {
   const [instructorData, setInstructorData] = useAtom(instructorMap);
   const [clientData, setClientData] = useAtom(clientMap);
   const [classData, setClassData] = useAtom(classMap);
+  const [transactionData, setTransactionData] = useAtom(transactionMap);
 
-
+  const transactionArray = useMemo(() => Array.from(transactionData.values()), [transactionData]);
   const instructorArray = useMemo(() => Array.from(instructorData.values()), [instructorData]);
   const staffArray = useMemo(() => Array.from(staffData.values()), [staffData]);
   const roomArray = useMemo(() => Array.from(roomData.values()), [roomData]);
@@ -54,6 +55,9 @@ export default function Profiles() {
   const stHeaders = useMemo(() => ["First Name", "Last Name", "Type", "Author", "Client", "Notes"], []);
   const stLocked = useMemo(() => [2, 3], []);
 
+  const trFields = useMemo(() => ["trStatus", "trAmount", "trClient", "Author", "trInstructor", "trNotes"], []);
+  const trHeaders = useMemo(() => ["Paid?", "Amount", "Client", "Author", "Instructor", "Notes"], []);
+  const trLocked = useMemo(() => [3, 2, 4], [])
 
   const [rowData, setRowData] = useState<any[]>(Array.from(staffData.values()));
   const [columnDefs, setColumnDefs] = useState(stfHeaders.map((header, index) => ({ headerName: header, field: stfFields[index], filter: true,})) as ColDef[]);
@@ -154,6 +158,13 @@ export default function Profiles() {
             setRowData(Array.from(m.values()));
 
             break;
+          case "/transactions":
+            m = new Map(transactionData);
+            m.set(event.data.SortKey, event.data);
+            setTransactionData(m);
+            setRowData(Array.from(m.values()));
+  
+              break;
           default:
             m = new Map(classData);
             m.set(event.data.SortKey, event.data);
@@ -188,6 +199,9 @@ export default function Profiles() {
         break;
       case "Classes":
         updateData(claHeaders, claFields, classArray, claLocked);
+        break;
+      case "Transactions":
+        updateData(trHeaders, trFields, transactionArray, trLocked);
         break;
       default:
         updateData(stfHeaders, stfFields, staffArray, stfLocked);
@@ -336,6 +350,8 @@ export default function Profiles() {
             <option value="Instructors">Instructors</option>
             <option value="Rooms">Rooms</option>
             <option value="Classes">Classes</option>
+            <option value="Transactions">Transactions</option>
+
           </select>
         </div>
 

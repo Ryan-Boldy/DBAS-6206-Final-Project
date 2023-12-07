@@ -3,7 +3,6 @@ import { useCallback, useEffect } from "react";
 import { activeTab } from "../Resources/GlobalStates";
 import Home from "./Home";
 import Calendar from "./Calendar";
-import Financials from "./Financials";
 import Contact from "./Contact";
 import Profiles from "./Profiles";
 
@@ -14,7 +13,7 @@ interface HudProps {
 }
 export function Hud({ onLogout }: HudProps) {
 
-    const tabs = ["Home", "Calendar", "Financials", "Profiles", "Contact"];
+    const tabs = ["Home", "Calendar", "Profiles", "Contact"];
 
     const [tab, setTab] = useAtom(activeTab);
 
@@ -27,9 +26,6 @@ export function Hud({ onLogout }: HudProps) {
     switch(tab) {
         case "Calendar":
             page = <Calendar />;
-            break;
-        case "Financials":
-            page = <Financials />;
             break;
         case "Profiles":
             page = <Profiles />;
