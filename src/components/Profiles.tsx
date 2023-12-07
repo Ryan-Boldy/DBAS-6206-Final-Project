@@ -43,9 +43,9 @@ export default function Profiles() {
   const rmLocked = useMemo(() => [0], []);
 
 
-  const claFields = useMemo(() => ["clName", "instructorName", "classNotes", "Author", "PartitionKey"], []);
-  const claHeaders = useMemo(() => ["Class Name", "Instructor", "Notes", "Author", "Type"], []);
-  const claLocked = useMemo(() => [1, 3, 4], []);
+  const claFields = useMemo(() => ["clName", "classNotes", "Author", "PartitionKey"], []);
+  const claHeaders = useMemo(() => ["Class Name", "Notes", "Author", "Type"], []);
+  const claLocked = useMemo(() => [2, 4], []);
 
   const clFields = useMemo(() => ["clFirstName", "clLastName", "PartitionKey", "clBalance", "clNotes", "Author"], []);
   const clHeaders = useMemo(() => ["First Name", "Last Name", "Type", "Balance", "Notes", "Author"], []);
@@ -56,9 +56,9 @@ export default function Profiles() {
   const stHeaders = useMemo(() => ["First Name", "Last Name", "Type", "Author", "Notes"], []);
   const stLocked = useMemo(() => [2, 3], []);
 
-  const trFields = useMemo(() => ["trStatus", "trAmount", "trClient", "Author", "trInstructor", "trNotes"], []);
-  const trHeaders = useMemo(() => ["Paid?", "Amount", "Client", "Author", "Instructor", "Notes"], []);
-  const trLocked = useMemo(() => [3, 2, 4], [])
+  const trFields = useMemo(() => ["trStatus", "trAmount", "Author", "trNotes"], []);
+  const trHeaders = useMemo(() => ["Paid?", "Amount", "Author", "Notes"], []);
+  const trLocked = useMemo(() => [2], []);
 
   const [rowData, setRowData] = useState<any[]>(Array.from(staffData.values()));
   const [columnDefs, setColumnDefs] = useState(stfHeaders.map((header, index) => ({ headerName: header, field: stfFields[index], filter: true,})) as ColDef[]);
