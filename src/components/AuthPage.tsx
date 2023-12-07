@@ -8,22 +8,32 @@ import { StaffComponent } from "./DataComponents/Staff";
 import { StudentComponent } from "./DataComponents/Students";
 import { TransactionComponent } from "./DataComponents/Transactions";
 import { Hud } from "./Hud";
+import { useAtom } from 'jotai';
+import { user } from '../Resources/GlobalStates';
 
 export function AuthPage() {
     const [loggedIn, setLoggedIn] = useState(false);
-    const [userName, setUserName] = useState('');
+    const [userName, setUserName] = useAtom(user);
     const [password, setPassword] = useState('');
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         // For now, just loging the inputs to the console
         console.log('Username:', userName);
         console.log('Password:', password);
 
         // Update login status
-        setLoggedIn(true);
-
+        const rq = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            body: JSON.stringify({SortKey: userName, password: password})
+        }
+        const res = await fetch(`${import.meta.env.VITE_URL}auth`, rq);
+        if(res.ok) {
+            setLoggedIn(true);
+        }
         // Clear username and password fields
-        setUserName('');
         setPassword('');
     };
 

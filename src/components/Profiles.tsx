@@ -3,10 +3,10 @@ import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { AgGridReact } from 'ag-grid-react';
 import { CellValueChangedEvent, ColDef, GridOptions } from 'ag-grid-community';
 import { useEffect, useMemo, useState } from 'react';
-import { classMap, clientMap, instructorMap, roomMap, staffMap, studentMap, transactionMap } from '../Resources/GlobalStates';
+import { classMap, clientMap, instructorMap, roomMap, staffMap, studentMap, transactionMap, user } from '../Resources/GlobalStates';
 import { useAtom } from 'jotai';
 import { Instructor } from '../Resources/GlobalInterfaces';
-
+import { v4 as uuidv4 } from 'uuid';
 // AG Grid column definitions
 
 
@@ -20,6 +20,7 @@ export default function Profiles() {
   const [clientData, setClientData] = useAtom(clientMap);
   const [classData, setClassData] = useAtom(classMap);
   const [transactionData, setTransactionData] = useAtom(transactionMap);
+  const [auth] = useAtom(user);
 
   const transactionArray = useMemo(() => Array.from(transactionData.values()), [transactionData]);
   const instructorArray = useMemo(() => Array.from(instructorData.values()), [instructorData]);
@@ -42,17 +43,17 @@ export default function Profiles() {
   const rmLocked = useMemo(() => [0], []);
 
 
-  const claFields = useMemo(() => ["classInstructor", "classNotes", "Author", "PartitionKey"], []);
-  const claHeaders = useMemo(() => ["Instructor", "Notes", "Author", "Type"], []);
-  const claLocked = useMemo(() => [2, 3], []);
+  const claFields = useMemo(() => ["clName", "classInstructor", "classNotes", "Author", "PartitionKey"], []);
+  const claHeaders = useMemo(() => ["Class Name", "Instructor", "Notes", "Author", "Type"], []);
+  const claLocked = useMemo(() => [1, 3, 4], []);
 
   const clFields = useMemo(() => ["clFirstName", "clLastName", "PartitionKey", "clBalance", "clNotes", "Author"], []);
   const clHeaders = useMemo(() => ["First Name", "Last Name", "Type", "Balance", "Notes", "Author"], []);
   const clLocked = useMemo(() => [2, 5], []);
 
 
-  const stFields = useMemo(() => ["stFirstName", "stLastName", "PartitionKey", "Author", "stClient", "stNotes"], []);
-  const stHeaders = useMemo(() => ["First Name", "Last Name", "Type", "Author", "Client", "Notes"], []);
+  const stFields = useMemo(() => ["stFirstName", "stLastName", "PartitionKey", "Author","stNotes"], []);
+  const stHeaders = useMemo(() => ["First Name", "Last Name", "Type", "Author", "Notes"], []);
   const stLocked = useMemo(() => [2, 3], []);
 
   const trFields = useMemo(() => ["trStatus", "trAmount", "trClient", "Author", "trInstructor", "trNotes"], []);
@@ -85,7 +86,7 @@ export default function Profiles() {
     }));
   
     // Add a button column definition for the "Actions" column
-    if (profileType === "Classes" || profileType === "Clients") {
+    if (profileType === "Classes" || profileType === "Clients" || profileType === "Transactions") {
       newColumnDefs.push({
         headerName: "",
         cellRenderer: (params: any) => (
@@ -107,7 +108,32 @@ export default function Profiles() {
     (gridApi as any)?.setQuickFilter(e.target.value);
   }
   
-  
+
+  function createClick(): void {
+    switch(profileType) {
+      case "Instructors":
+        onCellValueChanged({data: {PartitionKey: '/instructors', SortKey: uuidv4(), Author: auth, inFirstName: "FirstName", inLastName: "LastName", inNotes: " "}});
+        break;
+      case "Clients":
+        onCellValueChanged({data: {PartitionKey: '/clients', SortKey: uuidv4(), Author: auth, clFirstName: "FirstName", clLastName: "LastName", clNotes: " ", clStudents: [], clBalance: 0}});
+        break;
+      case "Students":
+        onCellValueChanged({data: {PartitionKey: '/students', SortKey: uuidv4(), Author: auth, stFirstName: "FirstName", stLastName: "LastName", stNotes: " "}});
+        break;
+      case "Rooms":
+        break;
+      case "Classes":
+        onCellValueChanged({data: {PartitionKey: '/class', SortKey: uuidv4(), Author: auth, students: [], classInstructor: " ", classNotes: " ", clName: " "}});
+        break;
+      case "Transactions":
+        onCellValueChanged({data: {PartitionKey: '/transactions', SortKey: uuidv4(), Author: auth, trClient: " ", trInstructor: " ", trStatus: false, trAmount: 0, trNotes: " " }});
+        break;
+      default:
+        //updateData(stfHeaders, stfFields, staffArray, stfLocked);
+        break;
+    }
+  }
+
   function onCellValueChanged(event: any): void {
     console.log(event.data);
     (async() => {
@@ -354,7 +380,7 @@ export default function Profiles() {
 
           </select>
         </div>
-
+        <button onClick={createClick}>Add Record</button>
         <div className="example-header">
           <span  style={{fontSize: 24}}>Quick Filter: </span>
           <input
