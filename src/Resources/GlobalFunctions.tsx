@@ -1,5 +1,3 @@
-import { unmarshall } from "@aws-sdk/util-dynamodb";
-
 export async function Retrieve(resource: string) {
     const requestOptions = {
         method: "GET",

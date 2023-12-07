@@ -50,6 +50,7 @@ export interface Class {
     classStudents: string[];
     classInstructor: string,
     classNotes: string,
+    students: string[],
 }
 
 export interface Booking {
