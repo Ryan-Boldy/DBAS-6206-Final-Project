@@ -35,7 +35,7 @@
   --h6-font-size:                 22px;
   --p-font-size:                  20px;
   --menu-font-size:               14px;
-  --nav-font-size:                22px;
+  --nav-font-size:                20px;
   --btn-font-size:                18px;
   --copyright-font-size:          16px;
 
@@ -87,6 +87,7 @@ h1 {
   padding-top: 10px;
   background-color: #FDFAEE;
   border-bottom: 2px solid #3A3363;
+  z-index: 2;
 }
 
 .tab-container {
@@ -206,6 +207,7 @@ td {
   --ag-header-foreground-color: var(--primary-color) !important;
   --ag-active-color: var(--primary-color) !important;
   --ag-border-color: #D3D1DB !important;
+  z-index: 1;
 }
 
 /* Calendar.css */
