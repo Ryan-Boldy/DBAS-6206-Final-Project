@@ -237,6 +237,7 @@ export default function Profiles() {
 
   function onCellValueChanged(event: any): void {
     console.log(event.data);
+    event.data.active = true;
     (async() => {
       const rq = {
         method: "POST",
