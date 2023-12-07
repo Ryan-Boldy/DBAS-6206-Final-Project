@@ -213,21 +213,21 @@ export default function Profiles() {
   function createClick(): void {
     switch(profileType) {
       case "Instructors":
-        onCellValueChanged({data: {PartitionKey: '/instructors', SortKey: uuidv4(), Author: auth, inFirstName: "FirstName", inLastName: "LastName", inNotes: " "}});
+        onCellValueChanged({data: {PartitionKey: '/instructors', SortKey: uuidv4(), Author: auth, inFirstName: "FirstName", inLastName: "LastName", inNotes: " ", active: true}});
         break;
       case "Clients":
-        onCellValueChanged({data: {PartitionKey: '/clients', SortKey: uuidv4(), Author: auth, clFirstName: "FirstName", clLastName: "LastName", clNotes: " ", clStudents: [], clBalance: 0}});
+        onCellValueChanged({data: {PartitionKey: '/clients', SortKey: uuidv4(), Author: auth, clFirstName: "FirstName", clLastName: "LastName", clNotes: " ", clStudents: [], clBalance: 0, active: true}});
         break;
       case "Students":
-        onCellValueChanged({data: {PartitionKey: '/students', SortKey: uuidv4(), Author: auth, stFirstName: "FirstName", stLastName: "LastName", stNotes: " "}});
+        onCellValueChanged({data: {PartitionKey: '/students', SortKey: uuidv4(), Author: auth, stFirstName: "FirstName", stLastName: "LastName", stNotes: " ", active: true}});
         break;
       case "Rooms":
         break;
       case "Classes":
-        onCellValueChanged({data: {PartitionKey: '/class', SortKey: uuidv4(), Author: auth, students: [], classInstructor: " ", classNotes: " ", clName: " "}});
+        onCellValueChanged({data: {PartitionKey: '/class', SortKey: uuidv4(), Author: auth, students: [], classInstructor: " ", classNotes: " ", clName: " ", active: true}});
         break;
       case "Transactions":
-        onCellValueChanged({data: {PartitionKey: '/transactions', SortKey: uuidv4(), Author: auth, trClient: " ", trInstructor: " ", trStatus: false, trAmount: 0, trNotes: " " }});
+        onCellValueChanged({data: {PartitionKey: '/transactions', SortKey: uuidv4(), Author: auth, trClient: " ", trInstructor: " ", trStatus: false, trAmount: 0, trNotes: " ", active: true }});
         break;
       default:
         //updateData(stfHeaders, stfFields, staffArray, stfLocked);
@@ -237,7 +237,6 @@ export default function Profiles() {
 
   function onCellValueChanged(event: any): void {
     console.log(event.data);
-    event.data.active = true;
     (async() => {
       const rq = {
         method: "POST",
