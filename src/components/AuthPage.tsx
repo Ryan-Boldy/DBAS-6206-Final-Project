@@ -35,12 +35,8 @@ export function AuthPage() {
     };
 
     return (
-        <div style={{ marginLeft: '12%', display: 'flex', alignItems: 'center' }}>
-            <img src={companyLogo} alt="Company Logo" className="company-logo" style={{ marginRight: '10px' }} />
-            <div style={{width: 'max-content'}}>
-                <h1>Your Music Depot</h1>
-                <p>Welcome! Please Sign-In to get Started!</p>
-            </div>
+        <>
+            
             {!loggedIn && (
                 <div style={{width: '100%', paddingLeft: '20%'}}>
                     <label htmlFor="username">Username: </label>
@@ -76,6 +72,6 @@ export function AuthPage() {
                     <TransactionComponent />
                 </>
             )}
-        </div>
+        </>
     );
 }

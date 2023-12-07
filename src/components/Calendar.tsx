@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo, ChangeEvent, FormEvent } from "react";
-import { classMap, roomMap } from '../Resources/GlobalStates';
+import { classMap, roomMap, bookingMap } from '../Resources/GlobalStates';
 import { useAtom } from 'jotai';
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -12,13 +12,31 @@ export default function Calendar() {
         stime: '',
         etime: '',
     });
-    
+    const [bookings, setBookings] = useState<string[]>([]);
     const [classDropdownOptions, setClassDropdownOptions] = useState<string[]>([]);
     const [roomDropdownOptions, setRoomDropdownOptions] = useState<string[]>([]);
+
+    const [bookingData, setBookingData] = useAtom(bookingMap);
     const [classData, setClassData] = useAtom(classMap);
     const [roomData, setRoomData] = useAtom(roomMap);
+
+    const bookingArray = useMemo(() => Array.from(bookingData.values()), [bookingData]);
     const classArray = useMemo(() => Array.from(classData.values()), [classData]);
     const roomArray = useMemo(() => Array.from(roomData.values()), [roomData]);
+
+    useEffect(() => {
+        const fetchBookings = async () => {
+          try {
+            const booking = bookingArray.map((bookingObj) => bookingObj.SortKey);
+            setBookings(booking);
+          } catch (error) {
+            console.error('Error:', error);
+          }
+        };
+    
+        fetchBookings();
+    }, [bookingArray]);
+
     useEffect(() => {
         // Fetch classes from the database
         // Assuming classData is an array of class objects with a property 'sortkey'
@@ -31,6 +49,7 @@ export default function Calendar() {
         const rooms = roomArray.map((roomObj) => roomObj.SortKey);
         setRoomDropdownOptions(rooms);
       }, [classArray]);
+
 
       const handleClassChange = (e: ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -46,13 +65,21 @@ export default function Calendar() {
             [name]: value,
         }));
     };  
-    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,
         }));
     };
+    const handleTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+    
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -91,7 +118,8 @@ export default function Calendar() {
                 <div className="calendar-container" style={{ width: '100%'}}>
                     <FullCalendar
                         plugins={[dayGridPlugin]}
-                        //events={events}
+                        // NEED: SET UP EVENT BOOKING
+                        //events={bookings}
                     />
                 </div>
             </div>
@@ -142,7 +170,7 @@ export default function Calendar() {
                         id="date"
                         name="date"
                         value={formData.date}
-                        onChange={handleChange}
+                        onChange={handleDateChange}
                         required
                         placeholder="Select a date"
                         className="input-field"
@@ -151,10 +179,10 @@ export default function Calendar() {
                     {/* Start Time input */}
                     <input
                         type="time"
-                        id="startTime"
-                        name="startTime"
+                        id="stime"
+                        name="stime"
                         value={formData.stime}
-                        onChange={handleChange}
+                        onChange={handleTimeChange}
                         required
                         placeholder="Start Time"
                         className="input-field"
@@ -163,10 +191,10 @@ export default function Calendar() {
                     {/* End Time input */}
                     <input
                         type="time"
-                        id="endTime"
-                        name="endTime"
+                        id="etime"
+                        name="etime"
                         value={formData.etime}
-                        onChange={handleChange}
+                        onChange={handleTimeChange}
                         required
                         placeholder="End Time"
                         className="input-field"
