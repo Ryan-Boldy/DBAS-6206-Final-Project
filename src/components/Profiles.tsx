@@ -43,7 +43,7 @@ export default function Profiles() {
   const rmLocked = useMemo(() => [0], []);
 
 
-  const claFields = useMemo(() => ["clName", "classInstructor", "classNotes", "Author", "PartitionKey"], []);
+  const claFields = useMemo(() => ["clName", "instructorName", "classNotes", "Author", "PartitionKey"], []);
   const claHeaders = useMemo(() => ["Class Name", "Instructor", "Notes", "Author", "Type"], []);
   const claLocked = useMemo(() => [1, 3, 4], []);
 
@@ -85,6 +85,98 @@ export default function Profiles() {
       editable: !locked.includes(index),
     }));
 
+    if (profileType === "Classes") {
+      newColumnDefs.push({
+        headerName: "Instructor Name",
+        field: "instructorName",
+        valueGetter: function (params) {
+          const rowNode = params.node;
+        
+          if (rowNode && rowNode.data) {
+            const rowId = rowNode.id;
+            console.log("Row ID:", rowNode.id);
+            const classInstructor = rowNode.data.classInstructor;
+            console.log("Class Instructor:", classInstructor);
+        
+            if (classInstructor) {
+              const instructorsArray = Array.from(instructorData.values());
+              console.log("Instructor Array:", instructorsArray);
+        
+              const matchingInstructor = instructorsArray.find(
+                (instructor) => instructor.SortKey === classInstructor
+              );
+              console.log("Matching Instructor:", matchingInstructor);
+              const instructorName = matchingInstructor
+                ? `${matchingInstructor.inFirstName} ${matchingInstructor.inLastName}`
+                : "Instructor Not Found";
+        
+              return instructorName;
+            }
+          }
+        },
+      });
+    }
+    
+    if (profileType === "Transactions") {
+      newColumnDefs.push({
+        headerName: "Instructor",
+        field: "instructor",
+        valueGetter: function (params) {
+          const rowNode = params.node;
+        
+          if (rowNode && rowNode.data) {
+            const rowId = rowNode.id;
+            console.log("Row ID:", rowNode.id);
+            const transactionInstructor = rowNode.data.trInstructor;
+            console.log("transaction Instructor:", transactionInstructor);
+        
+            if (transactionInstructor) {
+              const instructorsArray = Array.from(instructorData.values());
+              console.log("Instructor Array:", instructorsArray);
+        
+              const matchingInstructor = instructorsArray.find(
+                (instructor) => instructor.SortKey === transactionInstructor
+              );
+              console.log("Matching Instructor:", matchingInstructor);
+              const instructorName = matchingInstructor
+                ? `${matchingInstructor.inFirstName} ${matchingInstructor.inLastName}`
+                : "Instructor Not Found";
+        
+              return instructorName;
+            }
+          }
+        },
+      });
+      newColumnDefs.push({
+        headerName: "Client",
+        field: "client",
+        valueGetter: function (params) {
+          const rowNode = params.node;
+        
+          if (rowNode && rowNode.data) {
+            const rowId = rowNode.id;
+            console.log("Row ID:", rowNode.id);
+            const transactionClient = rowNode.data.trClient;
+            console.log("transaction Client:", transactionClient);
+        
+            if (transactionClient) {
+              const iclientArray = Array.from(clientData.values());
+              console.log("Client Array:", clientArray);
+        
+              const matchingClient = clientArray.find(
+                (client) => client.SortKey === transactionClient
+              );
+              console.log("Matching Client:", matchingClient);
+              const clientName = matchingClient
+                ? `${matchingClient.clFirstName} ${matchingClient.clLastName}`
+                : "Client Not Found";
+        
+              return clientName;
+            }
+          }
+        },
+      });
+    }
     if(profileType !== "Rooms" && profileType !== "Transactions" && profileType !== "Staff") {
       newColumnDefs.push({
         headerName: "Active?",
@@ -103,6 +195,7 @@ export default function Profiles() {
       });
     }
   
+    
     setColumnDefs(newColumnDefs);
     setRowData(rd);
   };
@@ -216,7 +309,7 @@ export default function Profiles() {
 
   useEffect(() => {
     
-    console.log("DEBUG",studentData.get("7c2b3c4d-5e6f-7g8h-9i10-jk11lmno12pq"));
+    console.log("DEBUG",instructorData.get("3f2b3c4d-5e6f-7g8h-9i10-jk11lmno12pq"));
     console.log("Set to:",profileType);
     switch(profileType) {
       case "Instructors":
