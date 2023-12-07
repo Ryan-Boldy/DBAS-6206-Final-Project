@@ -5,8 +5,10 @@ import { CellValueChangedEvent, ColDef, GridOptions } from 'ag-grid-community';
 import { useEffect, useMemo, useState } from 'react';
 import { classMap, clientMap, instructorMap, roomMap, staffMap, studentMap } from '../Resources/GlobalStates';
 import { useAtom } from 'jotai';
+import { Instructor } from '../Resources/GlobalInterfaces';
 
 // AG Grid column definitions
+
 
 export default function Profiles() {
   const [profileType, setProfileType] = useState('Staff');
@@ -53,21 +55,45 @@ export default function Profiles() {
   const stLocked = useMemo(() => [2, 3], []);
 
 
-  const [rowData, setRowData] = useState(Array.from(staffData.values()));
+  const [rowData, setRowData] = useState<any[]>(Array.from(staffData.values()));
   const [columnDefs, setColumnDefs] = useState(stfHeaders.map((header, index) => ({ headerName: header, field: stfFields[index], filter: true,})) as ColDef[]);
   
   const [gridApi, setGridApi] = useState(null);
   const [gridColumnApi, setGridColumnApi] = useState(null);
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState<any>(null);
+
+
+
   const gridOptions: GridOptions = {
     quickFilterText: '', // Initial quick filter value
   };
 
+
   const updateData = (headers: string[], fields: string[], rd: any, locked: number[]) => {
     console.log("Grid updating..");
-      setColumnDefs(headers.map((header, index) => ({ headerName: header, field: fields[index], filter: true, editable: (!locked.includes(index)) })));
-      setRowData(rd);
+    const newColumnDefs: ColDef[] = headers.map((header, index) => ({
+      headerName: header,
+      field: fields[index],
+      filter: true,
+      editable: !locked.includes(index),
+    }));
+  
+    // Add a button column definition for the "Actions" column
+    if (profileType === "Classes" || profileType === "Clients") {
+      newColumnDefs.push({
+        headerName: "",
+        cellRenderer: (params: any) => (
+          <button onClick={() => handleButtonClick(params.data)}>Modify</button>
+        ),
+      });
+    }
+  
+    setColumnDefs(newColumnDefs);
+    setRowData(rd);
   };
+
 
   function onGridReady(params: { api: any; columnApi: any }) {
     setGridApi(params.api);
@@ -78,7 +104,7 @@ export default function Profiles() {
   }
   
   
-  function onCellValueChanged(event: CellValueChangedEvent<any, any>): void {
+  function onCellValueChanged(event: any): void {
     console.log(event.data);
     (async() => {
       const rq = {
@@ -92,7 +118,51 @@ export default function Profiles() {
       const res = await fetch(`${import.meta.env.VITE_URL}${event.data.PartitionKey.substring(1)}`, rq);
       console.log("RESPONSE", res);
       if(res.ok) {
+        let m;
+        switch(event.data.PartitionKey) {
+          case "/instructors":
+            m = new Map(instructorData);
+            m.set(event.data.SortKey, event.data);
+            setInstructorData(m);
+            setRowData(Array.from(m.values()));
+            break;
+          case "/staff":
+            m = new Map(staffData);
+            m.set(event.data.SortKey, event.data);
+            setStaffData(m);
+            setRowData(Array.from(m.values()));
 
+            break;
+          case "/students":
+            m = new Map(studentData);
+            m.set(event.data.SortKey, event.data);
+            setStudentData(m);
+            setRowData(Array.from(m.values()));
+
+            break;
+          case "/clients":
+            m = new Map(clientData);
+            m.set(event.data.SortKey, event.data);
+            setClientData(m);
+            setRowData(Array.from(m.values()));
+
+            break;
+          case "/rooms":
+            m = new Map(roomData);
+            m.set(event.data.SortKey, event.data);
+            setRoomData(m);
+            setRowData(Array.from(m.values()));
+
+            break;
+          default:
+            m = new Map(classData);
+            m.set(event.data.SortKey, event.data);
+            setClassData(m);
+            console.log("M", m);
+            setRowData(Array.from(m.values()));
+
+            break;
+        }
       }
     })();
 
@@ -126,22 +196,140 @@ export default function Profiles() {
   }, [profileType]);
 
   useEffect(() => {
-    console.log(rowData);
-    const requestOptions = {
-
-    }
-  }, [rowData]);
-
-  useEffect(() => {
     console.log(columnDefs);
   }, [columnDefs]);
 
 
+
+  const handleSaveChanges = () => {
+    // Add your logic to save changes to rowData
+    console.log("Saving changes:", selectedRowData);
+  
+    // Close the menu after saving changes
+    closeMenu();
+  };
+
+  const closeMenu = () => {
+    // Close the menu and reset the selected row data
+    setIsMenuOpen(false);
+    setSelectedRowData(null);
+  };
+
+  const handleButtonClick = (rowData: any) => {
+    // Add your logic here for handling the button click
+    console.log("Button clicked for row data:", rowData);
+    setSelectedRowData(rowData);
+    setIsMenuOpen(true);
+    // Perform any other actions you need
+  };
+  
+  const renderMenuContent = () => {
+    // Common menu structure
+    return (
+      <div className="menu-content">
+        {/* Render form fields or any other components to modify the rowData */}
+        {/* For example, you can use input fields to edit the rowData */}
+        {/* <input type="text" value={selectedRowData.someProperty} onChange={(e) => handleInputChange(e)} /> */}
+        {/* Add other form fields as needed */}
+        <button onClick={closeMenu}>Close</button>
+      </div>
+    );
+  };
+  
+  const renderClassesMenu = () => {
+
+  
+    const handleInstructorChange = (instructor: Instructor) => {
+      setSelectedRowData({...selectedRowData, classInstructor: instructor.SortKey})
+      const event = {data: {...selectedRowData, classInstructor: instructor.SortKey}};
+      onCellValueChanged(event);
+    };
+  
+    const handleStudentChange = (studentId: string) => {
+      // Create a new array to represent the updated students
+      const updatedStudents = [...selectedRowData.students];
+    
+      // Check if the studentId is already in the array
+      const index = updatedStudents.indexOf(studentId);
+    
+      if (index !== -1) {
+        // If the studentId is found, remove it
+        updatedStudents.splice(index, 1);
+      } else {
+        // If the studentId is not found, add it
+        updatedStudents.push(studentId);
+      }
+    
+      // Log or use the updatedStudents array as needed
+      console.log(updatedStudents);
+    
+      // If you need to update the selectedRowData with the new array
+      // (this is typically done with a state update in a React component)
+      setSelectedRowData({ ...selectedRowData, students: updatedStudents });
+      const event = {data: {...selectedRowData, students: updatedStudents}};
+      onCellValueChanged(event);
+    };  
+  
+    return (
+      <div>
+        <p>Modify Class: {selectedRowData.SortKey}</p>
+        {/* Customize the menu for the "Clients" profileType */}
+        <div>
+          <p>Select an Instructor:</p>
+          {instructorArray.map((instructor) => (
+            <label key={instructor.SortKey}>
+              <input
+                type="radio"
+                value={instructor.SortKey}
+                checked={selectedRowData.classInstructor === instructor.SortKey}
+                onChange={() => handleInstructorChange(instructor)}
+              />
+              {`${instructor.inFirstName} ${instructor.inLastName}`}
+            </label>
+          ))}
+        </div>
+        <div>
+          <p>Select Students:</p>
+          {studentArray.map((student) => (
+            <label key={student.SortKey}>
+              <input
+                type="checkbox"
+                value={student.SortKey}
+                checked={selectedRowData.students.includes(student.SortKey) }
+                onChange={() => handleStudentChange(student.SortKey)}
+              />
+              {`${student.stFirstName} ${student.stLastName}`}
+            </label>
+          ))}
+        </div>
+        {renderMenuContent()}
+      </div>
+    );
+  };
+  
+  const renderClientsMenu = () => {
+    return (
+      <div>
+        {/* Customize the menu for the "Classes" profileType */}
+        <p>Modify Client Data:</p>
+        {renderMenuContent()}
+        {/* Add additional content specific to the "Classes" profileType */}
+      </div>
+    );
+  };
+
   return (
     <div style={({paddingTop: 200, paddingLeft: 100})}>
 
+        {isMenuOpen && selectedRowData && (
+          <div className="menu-container">
+            {/* Render different menus based on profileType */}
+            {profileType === 'Clients' ? renderClientsMenu() : null}
+            {profileType === 'Classes' ? renderClassesMenu() : null}
+          </div>
+        )}
         <div>
-          <select id="profileType" value={profileType} onChange={(e) => setProfileType(e.target.value)} required className="input-field">
+          <select id="profileType" value={profileType} onChange={(e) => {closeMenu(); setProfileType(e.target.value);}} required className="input-field">
             <option value="Staff">Staff</option>
             <option value="Students">Students</option>
             <option value="Clients">Clients</option>
@@ -174,6 +362,8 @@ export default function Profiles() {
           onCellValueChanged={onCellValueChanged}
         />
       </div>
+
+
     </div>
   );
 }

@@ -28,24 +28,24 @@ export function ClassComponent() {
         }
     }, []);
 
-    useEffect(() => {
-        if(stStatus) {
-            const tempMap = new Map(m);
-            for(const [key, value] of stMap) {
-                for(const c of value.stClasses) {
-                    const cl = tempMap.get(c);
-                    if(cl) {
-                        cl.students = cl.students ? cl.students : [];
-                        cl.students.push(key);
-                        tempMap.set(c, cl);
-                    }
-                }
-            }
-            console.log("Classes initialized.", tempMap);
-            setMap(tempMap);
-            setStatus(true);
-        }
-    }, [stStatus])
+    // useEffect(() => {
+    //     if(stStatus) {
+    //         const tempMap = new Map(m);
+    //         for(const [key, value] of stMap) {
+    //             for(const c of value.stClasses) {
+    //                 const cl = tempMap.get(c);
+    //                 if(cl) {
+    //                     cl.students = cl.students ? cl.students : [];
+    //                     cl.students.push(key);
+    //                     tempMap.set(c, cl);
+    //                 }
+    //             }
+    //         }
+    //         console.log("Classes initialized.", tempMap);
+    //         setMap(tempMap);
+    //         setStatus(true);
+    //     }
+    // }, [stStatus])
 
     return(<></>);
 }
