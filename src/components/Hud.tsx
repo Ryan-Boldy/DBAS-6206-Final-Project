@@ -13,7 +13,7 @@ interface HudProps {
 }
 export function Hud({ onLogout }: HudProps) {
 
-    const tabs = ["Home", "Calendar", "Profiles", "Contact"];
+    const tabs = ["Home", "Calendar", "Dashboard", "Contact"];
 
     const [tab, setTab] = useAtom(activeTab);
 
@@ -27,7 +27,7 @@ export function Hud({ onLogout }: HudProps) {
         case "Calendar":
             page = <Calendar />;
             break;
-        case "Profiles":
+        case "Dashboard":
             page = <Profiles />;
             break;
         case "Contact":
