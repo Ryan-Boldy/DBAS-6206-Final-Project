@@ -9,7 +9,10 @@ import Profiles from "./Profiles";
 
 import companyLogo from "../assets/img/YMDLogo.png";
 
-export function Hud() {
+interface HudProps {
+    onLogout: () => void;
+}
+export function Hud({ onLogout }: HudProps) {
 
     const tabs = ["Home", "Calendar", "Financials", "Profiles", "Contact"];
 
@@ -41,11 +44,16 @@ export function Hud() {
                 <img src={companyLogo} alt="Company Logo" className="company-logo" />
                 <h1 className="spacer">Your Music Depot</h1>
                 <div className="tab-container">
-                {tabs.map((t) => (
-                    <button className="navbar-btn" id={t} key={t} onClick={tabClick}>
-                    {t}
-                    </button>
-                ))}
+                    {tabs.map((t) => (
+                        <button className="navbar-btn" id={t} key={t} onClick={tabClick}>
+                        {t}
+                        </button>
+                    ))}
+                    {onLogout && (
+                        <button className="navbar-btn" onClick={onLogout}>
+                            Logout
+                        </button>
+                    )}
                 </div>
             </div>
             {page}

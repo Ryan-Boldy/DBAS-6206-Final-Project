@@ -111,7 +111,7 @@ export default function Contact() {
                         />
 
                         {/* Submit button */}
-                        <button className="custom2-btn" type="submit">Submit</button>
+                        <button className="custom-btn" type="submit">Submit</button>
                     </form>
                 </div>
             </div>

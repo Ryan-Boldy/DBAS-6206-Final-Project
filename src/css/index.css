@@ -154,7 +154,7 @@ h1 {
 .custom-btn:hover {
   font-weight: bold;
   color: #262140 !important;
-  background: #F3D569;
+  background-color: #F3D569 !important;
 }
 .spacer {
   padding-right: 30px;
