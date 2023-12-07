@@ -66,7 +66,6 @@ export interface Booking {
     bkTime: string,
     bkNotes: string,
     bkRoom: string,
-    active: boolean,
 
 }
 

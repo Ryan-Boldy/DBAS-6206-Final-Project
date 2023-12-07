@@ -1,8 +1,12 @@
 import React, { useEffect, useState, useMemo, ChangeEvent, FormEvent } from "react";
-import { classMap, roomMap, bookingMap } from '../Resources/GlobalStates';
+import { classMap, roomMap, bookingMap, instructorMap, user } from '../Resources/GlobalStates';
 import { useAtom } from 'jotai';
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import DatePicker from 'react-datepicker';
+import { EventApi } from "@fullcalendar/core/index.js";
+import { v4 as uuidv4 } from 'uuid';
+import { Booking } from "../Resources/GlobalInterfaces";
 
 export default function Calendar() {
     const [formData, setFormData] = useState({
@@ -12,18 +16,23 @@ export default function Calendar() {
         stime: '',
         etime: '',
     });
+    const [auth] = useAtom(user);
     const [bookings, setBookings] = useState<string[]>([]);
+    const [instructorData] = useAtom(instructorMap);
     const [classDropdownOptions, setClassDropdownOptions] = useState<string[]>([]);
+    const [classDropDownNames, setClassDropDownNames] = useState<string[]>([]);
     const [roomDropdownOptions, setRoomDropdownOptions] = useState<string[]>([]);
-
+    const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
     const [bookingData, setBookingData] = useAtom(bookingMap);
     const [classData, setClassData] = useAtom(classMap);
     const [roomData, setRoomData] = useAtom(roomMap);
+    const [hoveredEvent, setHoveredEvent] = useState<any>(null);
+
 
     const bookingArray = useMemo(() => Array.from(bookingData.values()), [bookingData]);
     const classArray = useMemo(() => Array.from(classData.values()), [classData]);
     const roomArray = useMemo(() => Array.from(roomData.values()), [roomData]);
-
+    
     useEffect(() => {
         const fetchBookings = async () => {
           try {
@@ -37,11 +46,17 @@ export default function Calendar() {
         fetchBookings();
     }, [bookingArray]);
 
+    const handleEventMouseEnter = (info: {event: EventApi}) => {
+        setHoveredEvent(info.event);
+      };
+    
     useEffect(() => {
         // Fetch classes from the database
         // Assuming classData is an array of class objects with a property 'sortkey'
         const classes = classArray.map((classObj) => classObj.SortKey);
+        const classNames = classArray.map((classObj) => classObj.clName);
         setClassDropdownOptions(classes);
+        setClassDropDownNames(classNames);
       }, [classArray]);
       useEffect(() => {
         // Fetch rooms from the database
@@ -86,12 +101,23 @@ export default function Calendar() {
 
         // Implement your logic to handle form submission, e.g., sending data to a server
         try {
-            const response = await fetch('your-api-endpoint', {
+            const time = new Date(`${formData.date}T${formData.etime}`).toISOString();
+            const b = {
+                PartitionKey: "/bookings",
+                SortKey: uuidv4(),
+                bkTime: time,
+                Author: auth,
+                bkNotes: "",
+                bkRoom: formData.room,
+                bkClass: formData.class,
+            }
+            console.log(b);
+            const response = await fetch(`${import.meta.env.VITE_URL}bookings`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(b),
             });
 
             if (response.ok) {
@@ -104,6 +130,9 @@ export default function Calendar() {
                     stime: '',
                     etime: '',
                 });
+                const bkMap = new Map(bookingData);
+                bkMap.set(b.SortKey, b as Booking);
+                setBookingData(bkMap);
             } else {
                 console.error('Error submitting form data');
             }
@@ -112,17 +141,8 @@ export default function Calendar() {
         }
     };
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', marginTop: '50px', marginLeft: '20%', width: '100%'}}>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', marginTop: '50px', marginLeft: '20%', width: '1000px', paddingTop: "5%"}}>
         <div style={{ display: 'flex', width: 'max-content'}}>
-            <div style={{ flex: 1, textAlign: 'left', marginRight: '10%' }}>
-                <div className="calendar-container" style={{ width: '100%'}}>
-                    <FullCalendar
-                        plugins={[dayGridPlugin]}
-                        // NEED: SET UP EVENT BOOKING
-                        //events={bookings}
-                    />
-                </div>
-            </div>
 
             {/* Right half - Contact Form */}
             <div style={{ flex: 1 }}>
@@ -140,8 +160,8 @@ export default function Calendar() {
                     >
                         <option value="" disabled>Select a Class</option>
                         {classDropdownOptions.map((className, index) => (
-                        <option key={index} value={className}>
-                            {className}
+                        <option key={className} value={className}>
+                            {classDropDownNames[index]}
                         </option>
                         ))}
                     </select>
@@ -164,7 +184,7 @@ export default function Calendar() {
                         ))}
                     </select>
 
-                    {/* Date picker input */}
+                    {/* Date picker input. This needs to have a time picker as well as the date */}
                     <input
                         type="date"
                         id="date"
@@ -173,18 +193,6 @@ export default function Calendar() {
                         onChange={handleDateChange}
                         required
                         placeholder="Select a date"
-                        className="input-field"
-                    />
-
-                    {/* Start Time input */}
-                    <input
-                        type="time"
-                        id="stime"
-                        name="stime"
-                        value={formData.stime}
-                        onChange={handleTimeChange}
-                        required
-                        placeholder="Start Time"
                         className="input-field"
                     />
 
@@ -204,6 +212,34 @@ export default function Calendar() {
                 </form>
             </div>
         </div>
+        <div style={{ flex: 1, textAlign: 'left', marginRight: '10%', paddingTop: '10%'}}>
+            <div className="calendar-container" style={{ width: 1250, height: 1250, paddingLeft: "5%"}}>
+                <FullCalendar
+                    plugins={[dayGridPlugin]}
+                    // NEED: SET UP EVENT BOOKING
+                    events={bookingArray.map((booking) => ({title: classData.get(booking.bkClass)?.clName, description: booking.bkRoom, instructor: (() => {const res = instructorData.get(classData.get(booking.bkClass)?.classInstructor as string); return `${res?.inFirstName} ${res?.inLastName}`})(), start: booking.bkTime, end: new Date(new Date(booking.bkTime).getTime()+3600*1000).toISOString()}) as any)}
+                    eventClick={handleEventMouseEnter} // Handle event mouse enter
+                />
+            </div>
+        </div>
+        {hoveredEvent && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '60%', // Adjust the percentage as needed
+            left: '50%', // Adjust the percentage as needed
+            transform: 'translate(-50%, -50%)',
+            border: '1px solid #ccc',
+            padding: '5px',
+            background: '#fff',
+          }}
+        >
+          <strong>Class Name: {hoveredEvent.title}</strong>
+          <p>Room: {hoveredEvent.extendedProps?.description}</p>
+          <p>Instructor: {hoveredEvent.extendedProps?.instructor}</p>
+
+        </div>
+      )}
     </div>
   );
 }

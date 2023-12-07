@@ -17,6 +17,7 @@
     "@fullcalendar/react": "^6.1.10",
     "@react-typed-hooks/use-key-press": "^1.0.5",
     "@types/fullcalendar": "^3.8.0",
+    "@types/react-datepicker": "^4.19.3",
     "@types/uuid": "^9.0.7",
     "ag-grid-community": "^31.0.0",
     "ag-grid-react": "^31.0.0",
@@ -24,6 +25,7 @@
     "jotai": "^2.4.2",
     "query-string": "^8.1.0",
     "react": "^18.2.0",
+    "react-datepicker": "^4.24.0",
     "react-dom": "^18.2.0",
     "react-hotkeys": "^2.0.0",
     "uuid": "^9.0.1"
