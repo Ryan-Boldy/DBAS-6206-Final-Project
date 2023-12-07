@@ -6,6 +6,7 @@ export interface Student {
     stNotes: string,
     stFirstName: string,
     stLastName: string,
+    active: boolean,
 }
 
 export interface Staff {
@@ -17,6 +18,8 @@ export interface Staff {
     staffApproved: boolean,
     staffFirstName: string,
     staffLastName: string,
+    active: boolean,
+
 }
 
 export interface Instructor {
@@ -25,7 +28,9 @@ export interface Instructor {
     Author: string,
     inFirstName: string,
     inLastName: string,
-    inNotes: string
+    inNotes: string, 
+    active: boolean,
+
 }
 
 export interface Client {
@@ -37,6 +42,8 @@ export interface Client {
     clLastName: string,
     clNotes: string,
     clBalance: number,
+    active: boolean,
+
 }
 
 export interface Class {
@@ -47,6 +54,8 @@ export interface Class {
     classNotes: string,
     students: string[],
     clName: string,
+    active: boolean,
+
 }
 
 export interface Booking {
@@ -57,6 +66,8 @@ export interface Booking {
     bkTime: string,
     bkNotes: string,
     bkRoom: string,
+    active: boolean,
+
 }
 
 export interface Transaction {
@@ -68,6 +79,8 @@ export interface Transaction {
     trStatus: boolean,
     trAmount: number,
     trNotes: string,
+    active: boolean,
+
 }
 
 export interface Room {

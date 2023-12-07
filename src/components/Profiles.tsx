@@ -1,7 +1,7 @@
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { AgGridReact } from 'ag-grid-react';
-import { CellValueChangedEvent, ColDef, GridOptions } from 'ag-grid-community';
+import { ColDef, GridOptions } from 'ag-grid-community';
 import { useEffect, useMemo, useState } from 'react';
 import { classMap, clientMap, instructorMap, roomMap, staffMap, studentMap, transactionMap, user } from '../Resources/GlobalStates';
 import { useAtom } from 'jotai';
@@ -64,7 +64,7 @@ export default function Profiles() {
   const [columnDefs, setColumnDefs] = useState(stfHeaders.map((header, index) => ({ headerName: header, field: stfFields[index], filter: true,})) as ColDef[]);
   
   const [gridApi, setGridApi] = useState(null);
-  const [gridColumnApi, setGridColumnApi] = useState(null);
+  const [, setGridColumnApi] = useState(null);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
@@ -84,6 +84,14 @@ export default function Profiles() {
       filter: true,
       editable: !locked.includes(index),
     }));
+
+    if(profileType !== "Rooms" && profileType !== "Transactions" && profileType !== "Staff") {
+      newColumnDefs.push({
+        headerName: "Active?",
+        field: "active",
+        editable: true
+      })
+    }
   
     // Add a button column definition for the "Actions" column
     if (profileType === "Classes" || profileType === "Clients" || profileType === "Transactions") {
@@ -239,15 +247,6 @@ export default function Profiles() {
     console.log(columnDefs);
   }, [columnDefs]);
 
-
-
-  const handleSaveChanges = () => {
-    // Add your logic to save changes to rowData
-    console.log("Saving changes:", selectedRowData);
-  
-    // Close the menu after saving changes
-    closeMenu();
-  };
 
   const closeMenu = () => {
     // Close the menu and reset the selected row data

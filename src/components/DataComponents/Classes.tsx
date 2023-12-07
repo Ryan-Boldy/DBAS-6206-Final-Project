@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { Retrieve } from "../../Resources/GlobalFunctions";
-import { classMap, classStatus, studentMap, studentStatus } from "../../Resources/GlobalStates";
+import { classMap, classStatus, } from "../../Resources/GlobalStates";
 import { useAtom } from "jotai";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { Class } from "../../Resources/GlobalInterfaces";
@@ -10,8 +10,6 @@ import { Class } from "../../Resources/GlobalInterfaces";
 export function ClassComponent() {
     const [m, setMap] = useAtom(classMap);
     const [status, setStatus] = useAtom(classStatus);
-    const [stStatus] = useAtom(studentStatus);
-    const [stMap] = useAtom(studentMap);
 
     useEffect(() => {
         if(!status) {
@@ -24,6 +22,7 @@ export function ClassComponent() {
                 }
                 console.log("class Data:", tempMap);
                 setMap(tempMap);
+                setStatus(true);
             })();
         }
     }, []);
